@@ -1,6 +1,6 @@
 import socket
 
-HOST = ''
+HOST = 'localhost'
 PORTA = 5000 
 
 sock = socket.socket()
@@ -8,13 +8,13 @@ sock.bind((HOST, PORTA))
 
 sock.listen(5)
 conn, address = sock.accept()
-print("Connection from: " + str(address))
+print("Adress: " + str(address) + "Connection: " + str(conn))
 while True:
     data = conn.recv(1024).decode()
-    if not data:
+    if (not data):
         break
-    print("from connected user: " + str(data))
-    conn.send(b'Ola, sou o lado passivo')
+    print("Veio do lado ativo: " + str(data))
+    conn.send(data.encode('utf-8'))
 
 conn.close()
 sock.close()

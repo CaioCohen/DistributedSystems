@@ -1,16 +1,18 @@
 import socket
 
 def ativoSocket():
-    HOST = '10.11.0.14'
+    HOST = 'localhost'
     PORTA = 5000
 
     sock = socket.socket()
     
     sock.connect((HOST,PORTA))
-    sock.send(b"Ola, sou o lado ativo")
-    msg = sock.recv(1024).decode()
-
-    print(str(msg))
+    msg = ""
+    while msg != 'fim':
+        msg = input()
+        sock.send(msg.encode('utf-8'))
+        retorno = sock.recv(1024).decode()
+        print(str(retorno))
 
     sock.close()
 
