@@ -8,8 +8,10 @@ def ativoSocket():
     
     sock.connect((HOST,PORTA))
     msg = ""
-    while msg != 'fim':
+    while True:
         msg = input()
+        if msg == 'fim':
+            break
         sock.send(msg.encode('utf-8'))
         retorno = sock.recv(1024).decode()
         print(str(retorno))
