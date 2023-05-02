@@ -17,6 +17,42 @@ entradas = [sys.stdin]
 conexoes = {}
 dicionario = {}
 
+class Arquivo():
+
+	def __init__(self, nome):
+		self.nome = nome
+	
+	def recuperarConteudo(self):
+		try: #caso dê erro na hora de ler o arquivo, então não deve ter nenhum arquivo ainda e ele ignora
+			with open(self.nome, 'r') as f: 
+				return json.load(f)
+		except:
+			return {}
+
+	def atualizarConteudo(self, dicionario):
+		with open(self.nome, 'w') as f:
+			json.dump(dicionario, f)
+
+class DicionarioInteracoes():
+
+	def __init__(self, dicionario):
+		self.dicionario = dicionario
+
+	def adicionaDicionario(self,chave, valor):
+		valores = []
+		if chave in self.dicionario:
+			valores = self.dicionario[chave]
+		valores.append(valor)
+		self.dicionario[chave] = valores
+
+	def recuperarValores(self, chave):
+		allKeys = self.dicionario.keys()
+		mensagem = ""
+		if(chave in allKeys):
+			mensagem = ",".join(sorted(self.dicionario[chave]))
+		else:
+			mensagem = "chave inexistente"
+		return mensagem
 
 def iniciaServidor():
 	# cria o socket
@@ -49,7 +85,7 @@ def aceitaConexao(sock):
 	return clisock, endr
 
 
-def atendeRequisicoes(clisock, endr):
+def atendeRequisicoes(clisock, endr, dicionario):
 
 	while True:
 		# recebe dados do cliente
@@ -63,31 +99,22 @@ def atendeRequisicoes(clisock, endr):
 		array = [x.strip() for x in msg.split(",")] # Ele irá pegar a string 'chave, valor' e colocar em um array ['chave', 'valor']
 		if len(array) >= 2:
 			for v in array[1:]:
-				adicionaDicionario(array[0], v)
+				dicionario.adicionaDicionario(array[0], v)
 			clisock.send(b"valor adicionado a chave")  # retorna mensagem de sucesso ao cliente
 		else:
-			mensagem = ",".join(dicionario[array[0]])
+			mensagem = dicionario.recuperarValores(array[0])
 			clisock.send(mensagem.encode())
                         
 
-def adicionaDicionario(chave, valor):
-    valores = []
-    if chave in dicionario:
-        valores = dicionario[chave]
-    valores.append(valor)
-    dicionario[chave] = valores
-    with open('dicionary.txt', 'w') as f:
-    	json.dump(dicionario, f)
+
 
 def main():
 	global dicionario #recuperando a variavel global
 	sock = iniciaServidor()
 	print("Pronto para receber conexoes...")
-	try: #caso dê erro na hora de ler o arquivo, então não deve ter nenhum arquivo ainda e ele ignora
-		with open('dicionary.txt', 'r') as f: 
-			dicionario = json.load(f)
-	except:
-		pass
+	arq = Arquivo('dicionary.txt')
+	dicionario = DicionarioInteracoes(arq.recuperarConteudo())
+
 	clientes = [] # armazena as threads criadas para fazer join
 	while True:
 		leitura, escrita, excecao = select.select(entradas, [], [])
@@ -98,7 +125,7 @@ def main():
 				clisock, endr = aceitaConexao(sock)
 				print('Conectado com: ', endr)
 				# cria nova thread para atender o cliente
-				cliente = threading.Thread(target=atendeRequisicoes, args=(clisock, endr))
+				cliente = threading.Thread(target=atendeRequisicoes, args=(clisock, endr, dicionario))
 				cliente.start()
 				clientes.append(cliente)  # armazena a referencia da thread para usar com join()
 			elif pronto == sys.stdin:  # entrada padrao
@@ -106,10 +133,14 @@ def main():
 				if cmd == 'fim':  # solicitacao de finalizacao do servidor
 					for c in clientes:  # aguarda todas as threads terminarem
 						c.join()
+					arq.atualizarConteudo(dicionario.dicionario) # atualiza o valor salvo em disco
 					sock.close()
 					sys.exit()
 				elif cmd == 'hist':  # outro exemplo de comando para o servidor
 					print(str(conexoes.values()))
+				elif cmd == 'salvar':
+					arq.atualizarConteudo(dicionario.dicionario)
+
 
 
 main()

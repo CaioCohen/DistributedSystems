@@ -1,1 +1,1 @@
-{"frutas": ["maca", "banana", "pera"], "cores": ["amarelo", "preto", "branco"]}
+{"frutas": ["maca", "banana", "pera"], "cores": ["verde", "amarelo", "preto"]}
