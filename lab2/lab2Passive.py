@@ -33,6 +33,10 @@ class Arquivo():
 		with open(self.nome, 'w') as f:
 			json.dump(dicionario, f)
 
+	def resetarConteudo(self):
+		with open(self.nome, 'w') as f:
+			f.write('')
+
 class DicionarioInteracoes():
 
 	def __init__(self, dicionario):
@@ -140,6 +144,11 @@ def main():
 					print(str(conexoes.values()))
 				elif cmd == 'salvar':
 					arq.atualizarConteudo(dicionario.dicionario)
+					print("dicionario salvo")
+				elif cmd == "del":
+					arq.resetarConteudo()
+					dicionario = DicionarioInteracoes(arq.recuperarConteudo())
+					print("dicionario resetado")
 
 
 
