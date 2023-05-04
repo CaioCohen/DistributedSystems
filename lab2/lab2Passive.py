@@ -35,7 +35,7 @@ class Arquivo():
 
 	def resetarConteudo(self):
 		with open(self.nome, 'w') as f:
-			f.write('')
+			f.write('{"chave": ["valor 1"]}') # deixa salvo um valor padrão para tipar a variável
 
 class DicionarioInteracoes():
 
@@ -57,6 +57,9 @@ class DicionarioInteracoes():
 		else:
 			mensagem = "chave inexistente"
 		return mensagem
+	
+	def reset(self):
+		self.dicionario = {"chave": ["valor 1"]} # salva um valor padrão pra tipar a variável
 
 def iniciaServidor():
 	# cria o socket
@@ -147,7 +150,7 @@ def main():
 					print("dicionario salvo")
 				elif cmd == "del":
 					arq.resetarConteudo()
-					dicionario = DicionarioInteracoes(arq.recuperarConteudo())
+					dicionario.reset()
 					print("dicionario resetado")
 
 

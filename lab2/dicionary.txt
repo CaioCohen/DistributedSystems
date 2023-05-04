@@ -1,1 +1,1 @@
-{"frutas": ["maca", "pera", "uva", "banana", "amendoim"]}
+{"chave": ["valor 1"]}
