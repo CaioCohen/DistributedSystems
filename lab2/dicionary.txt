@@ -1,1 +1,1 @@
-{"chave": ["valor 1"]}
+{"chave": ["valor 1"], "frutas": ["maca", "pacoca", "banana"]}
