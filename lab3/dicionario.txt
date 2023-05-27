@@ -1,1 +1,1 @@
-{"chave": ["valor 1"], "putDicionario": ["maca", "pera"]}
+{"chave": ["valor 1"], "putDicionario": ["maca", "pera"], "frutas": ["banana", "alface", "salmao"]}

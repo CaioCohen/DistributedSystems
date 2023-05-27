@@ -49,7 +49,7 @@ class Echo(rpyc.Service):
 	def exposed_getDicionario(self, chave):
 		try:
 			arq = Arquivo("dicionario.txt")
-			dic = arq.recuperarConteudo() #O programa não funcionará se não vier um dicionario
+			dic = arq.recuperarConteudo()
 			while(dic == -1):
 				arq.resetarConteudo()
 				dic = arq.recuperarConteudo()
@@ -66,7 +66,7 @@ class Echo(rpyc.Service):
 	def exposed_putDicionario(self, chave, valores):
 		try:
 			arq = Arquivo("dicionario.txt")
-			dic = arq.recuperarConteudo() #O programa não funcionará se não vier um dicionario
+			dic = arq.recuperarConteudo()
 			while(dic == -1):
 				arq.resetarConteudo()
 				dic = arq.recuperarConteudo()
@@ -82,7 +82,7 @@ class Echo(rpyc.Service):
 	def exposed_deleteDicionario(self, chave):
 		try:
 			arq = Arquivo("dicionario.txt")
-			dic = arq.recuperarConteudo() #O programa não funcionará se não vier um dicionario
+			dic = arq.recuperarConteudo()
 			while(dic == -1):
 				arq.resetarConteudo()
 				dic = arq.recuperarConteudo()
